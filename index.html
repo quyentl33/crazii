@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crazii Trading – Tối Ưu Lợi Nhuận Tiền Ảo Lên Đến 80%</title>
+  <meta name="description" content="Công cụ AI thông minh giúp bạn tối ưu hóa lợi nhuận giao dịch tiền ảo lên đến 80%." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:        #C9941A;
+      --gold-light:  #E8B84B;
+      --gold-btn:    #C9941A;
+      --gold-hover:  #A07314;
+      --green:       #3DAA70;
+      --red-neg:     #D95050;
+      --bg:          #0C0B09;
+      --bg2:         #131210;
+      --bg3:         #1A1815;
+      --bg4:         #222019;
+      --border:      rgba(255,255,255,0.08);
+      --border-gold: rgba(201,148,26,0.2);
+      --white:       #F0EDE8;
+      --gray:        #605D58;
+      --gray2:       #908C86;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      padding-top: 64px; /* clear fixed nav */
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+    /* ══════════════════════════════
+       NAV
+    ══════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      background: rgba(12,11,9,0.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+    .logo { font-size: 1.4rem; font-weight: 900; letter-spacing: 0.5px; line-height: 1; }
+    .logo .c { color: var(--gold); }
+    .logo .t { color: var(--white); font-weight: 400; font-size: 1rem; opacity: 0.65; margin-left: 2px; }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--gray2); text-decoration: none; font-size: 0.88rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--white); }
+
+    .btn-gold {
+      padding: 10px 24px;
+      background: var(--gold-btn);
+      border: none; border-radius: 6px;
+      color: #0C0B09; font-size: 0.85rem; font-weight: 800;
+      text-decoration: none; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-gold:hover { background: var(--gold-hover); transform: translateY(-1px); }
+
+    @media(max-width:768px) { .nav-links { display: none; } }
+
+    /* ══════════════════════════════
+       TICKER (sticky — không bao giờ che nội dung)
+    ══════════════════════════════ */
+    .ticker-wrapper {
+      position: sticky;
+      top: 64px;
+      z-index: 99;
+      height: 46px;
+      overflow: hidden;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .ticker-wrapper .tradingview-widget-container,
+    .ticker-wrapper .tradingview-widget-container__widget,
+    .ticker-wrapper iframe {
+      height: 46px !important;
+      max-height: 46px !important;
+    }
+    .tradingview-widget-copyright { display: none !important; }
+
+    /* ══════════════════════════════
+       HERO
+    ══════════════════════════════ */
+    #hero {
+      padding: 72px 0 80px;
+      min-height: calc(100vh - 110px);
+      display: flex;
+      align-items: center;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 64px;
+      align-items: center;
+    }
+    @media(max-width:900px) { .hero-grid { grid-template-columns: 1fr; } .hero-card-side { display:none; } }
+
+    .eyebrow {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 20px;
+    }
+    .eyebrow-bar { width: 24px; height: 2px; background: var(--gold); flex-shrink: 0; }
+
+    h1 {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+    }
+    h1 .accent { color: var(--gold); }
+
+    .hero-desc {
+      font-size: 1rem; color: var(--gray2);
+      line-height: 1.85; max-width: 480px; margin-bottom: 36px;
+    }
+    .hero-desc strong { color: var(--white); font-weight: 600; }
+
+    .btn-group { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .btn-gold-lg { padding: 14px 36px; font-size: 0.95rem; border-radius: 6px; }
+
+    .btn-ghost {
+      padding: 14px 28px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--gray2); font-size: 0.9rem; font-weight: 600;
+      text-decoration: none; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+    .hero-stats {
+      display: flex; gap: 36px; flex-wrap: wrap;
+      margin-top: 48px; padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .hstat .val { font-size: 2rem; font-weight: 900; color: var(--gold); letter-spacing: -1px; line-height: 1; }
+    .hstat .lbl { font-size: 0.74rem; color: var(--gray); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Hero Card */
+    .hero-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .hc-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+    }
+    .hc-head-title { font-size: 0.78rem; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: 1px; }
+    .live-pill { display:flex; align-items:center; gap:5px; font-size:0.68rem; color:var(--green); font-weight:700; letter-spacing:1px; }
+    .live-dot { width:5px; height:5px; background:var(--green); border-radius:50%; animation: blink 1.2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+    .hc-body { padding: 18px; }
+    .profit-box {
+      background: var(--bg3);
+      border: 1px solid var(--border-gold);
+      border-radius: 8px; padding: 18px;
+      text-align: center; margin-bottom: 14px;
+    }
+    .profit-box .lbl { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray); margin-bottom: 6px; }
+    .profit-box .val { font-size: 2.2rem; font-weight: 900; color: var(--gold); letter-spacing: -1px; line-height: 1; }
+    .profit-box .chg { font-size: 0.76rem; color: var(--green); font-weight: 600; margin-top: 4px; }
+
+    .trade-list { display: flex; flex-direction: column; gap: 2px; }
+    .trade-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 12px; background: var(--bg3); border-radius: 5px;
+      font-size: 0.82rem;
+    }
+    .trade-coin { display:flex; align-items:center; gap:8px; color:var(--white); font-weight:600; }
+    .cdot { width:7px; height:7px; border-radius:50%; }
+    .trade-pnl { color: var(--green); font-weight: 700; }
+    .hc-foot {
+      padding: 11px 18px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: 7px;
+      font-size: 0.73rem; color: var(--gray);
+    }
+    .hc-foot-dot { width:5px; height:5px; background:var(--green); border-radius:50%; }
+
+    /* ══════════════════════════════
+       SHARED SECTION STYLES
+    ══════════════════════════════ */
+    .section { padding: 90px 0; }
+    .section-alt { background: var(--bg2); }
+
+    .sec-head { margin-bottom: 52px; }
+    .sec-head.center { text-align: center; }
+    .sec-head.center .eyebrow { justify-content: center; }
+    .sec-head.center .eyebrow-bar { display: none; }
+    .sec-head.center .sec-desc { margin: 0 auto; }
+
+    h2 {
+      font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+      font-weight: 900; letter-spacing: -1px;
+      line-height: 1.1; margin-bottom: 12px;
+    }
+    h2 .g { color: var(--gold); }
+
+    .sec-desc { font-size: 0.93rem; color: var(--gray2); max-width: 500px; line-height: 1.8; }
+
+    /* Grid with hairline separator */
+    .grid-box {
+      display: grid;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+    }
+
+    /* ══════════════════════════════
+       PROBLEM
+    ══════════════════════════════ */
+    .prob-grid { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+    .prob-card { background: var(--bg2); padding: 32px 26px; transition: background 0.25s; }
+    .prob-card:hover { background: var(--bg3); }
+    .prob-icon { width:42px; height:42px; background:var(--bg4); border:1px solid var(--border); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; margin-bottom:16px; }
+    .prob-card h3 { font-size:0.95rem; font-weight:800; margin-bottom:9px; }
+    .prob-card p { font-size:0.83rem; color:var(--gray); line-height:1.75; }
+
+    /* ══════════════════════════════
+       SOLUTION
+    ══════════════════════════════ */
+    .sol-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 72px; align-items: center;
+    }
+    @media(max-width:880px) { .sol-layout { grid-template-columns: 1fr; } }
+
+    .feat-list { display: flex; flex-direction: column; }
+    .feat-item {
+      display: flex; gap: 16px;
+      padding: 22px 0; border-bottom: 1px solid var(--border);
+      transition: padding-left 0.25s;
+    }
+    .feat-item:first-child { border-top: 1px solid var(--border); }
+    .feat-item:hover { padding-left: 6px; }
+    .feat-ico { width:38px; height:38px; background:var(--bg3); border:1px solid var(--border-gold); border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; margin-top:2px; }
+    .feat-item h4 { font-size:0.92rem; font-weight:800; margin-bottom:4px; }
+    .feat-item p { font-size:0.82rem; color:var(--gray); line-height:1.7; }
+
+    .sol-card { background:var(--bg2); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+    .sol-card-head {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 18px; background:var(--bg3);
+      border-bottom:1px solid var(--border);
+    }
+    .sol-card-head .t { font-size:0.76rem; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:1px; }
+    .sol-card-body { padding:18px; }
+    .sol-profit { background:var(--bg3); border:1px solid var(--border-gold); border-radius:7px; padding:16px; text-align:center; margin-bottom:14px; }
+    .sol-profit .lbl { font-size:0.66rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--gray); margin-bottom:5px; }
+    .sol-profit .val { font-size:2rem; font-weight:900; color:var(--gold); letter-spacing:-1px; line-height:1; }
+    .sol-profit .chg { font-size:0.74rem; color:var(--green); font-weight:600; margin-top:3px; }
+    .sol-rows { display:flex; flex-direction:column; gap:2px; }
+    .sol-row { display:flex; justify-content:space-between; align-items:center; padding:9px 11px; background:var(--bg3); border-radius:4px; font-size:0.81rem; }
+    .sol-coin { display:flex; align-items:center; gap:7px; color:var(--white); font-weight:600; }
+    .sol-pnl { color:var(--green); font-weight:700; }
+
+    /* ══════════════════════════════
+       BENEFITS
+    ══════════════════════════════ */
+    .ben-grid { grid-template-columns: repeat(3, 1fr); }
+    @media(max-width:768px) { .ben-grid { grid-template-columns: 1fr; } }
+    .ben-card { background:var(--bg2); padding:36px 28px; transition:background 0.25s; position:relative; }
+    .ben-card:hover { background:var(--bg3); }
+    .ben-num { font-size:0.68rem; font-weight:800; letter-spacing:2px; color:var(--gold); opacity:0.45; margin-bottom:14px; text-transform:uppercase; }
+    .ben-ico { font-size:1.7rem; margin-bottom:14px; }
+    .ben-card h3 { font-size:0.93rem; font-weight:800; margin-bottom:9px; }
+    .ben-card p { font-size:0.82rem; color:var(--gray); line-height:1.75; }
+
+    /* ══════════════════════════════
+       TESTIMONIALS
+    ══════════════════════════════ */
+    .testi-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .testi-card { background:var(--bg2); padding:32px 26px; transition:background 0.25s; }
+    .testi-card:hover { background:var(--bg3); }
+    .stars { color:var(--gold); font-size:0.85rem; letter-spacing:2px; margin-bottom:14px; }
+    .testi-text { font-size:0.88rem; color:var(--gray2); line-height:1.8; margin-bottom:20px; font-style:italic; }
+    .testi-footer { display:flex; align-items:center; gap:11px; }
+    .testi-ava { width:38px; height:38px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:0.95rem; font-weight:900; color:#0C0B09; flex-shrink:0; }
+    .testi-name { font-size:0.85rem; font-weight:800; }
+    .testi-role { font-size:0.74rem; color:var(--gray); margin-top:2px; }
+
+    /* ══════════════════════════════
+       HOW IT WORKS
+    ══════════════════════════════ */
+    .how-grid { grid-template-columns: repeat(3, 1fr); }
+    @media(max-width:768px) { .how-grid { grid-template-columns: 1fr; } }
+    .how-card { background:var(--bg2); padding:36px 28px; transition:background 0.25s; }
+    .how-card:hover { background:var(--bg3); }
+    .step-tag { font-size:0.68rem; font-weight:800; letter-spacing:2px; color:var(--gold); opacity:0.55; margin-bottom:14px; text-transform:uppercase; }
+    .step-ico { width:50px; height:50px; background:var(--bg4); border:1px solid var(--border-gold); border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; margin-bottom:18px; }
+    .how-card h3 { font-size:0.93rem; font-weight:800; margin-bottom:9px; }
+    .how-card p { font-size:0.82rem; color:var(--gray); line-height:1.75; }
+
+    /* ══════════════════════════════
+       CTA
+    ══════════════════════════════ */
+    #cta { padding: 100px 0; }
+    .cta-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 72px 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute; top:0; left:0; right:0; height:2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .cta-badge {
+      display:inline-flex; align-items:center; gap:7px;
+      padding:5px 14px; margin-bottom:24px;
+      background:rgba(201,148,26,0.08);
+      border:1px solid var(--border-gold); border-radius:100px;
+      font-size:0.71rem; font-weight:700; letter-spacing:1.5px;
+      text-transform:uppercase; color:var(--gold);
+    }
+    .cta-badge-dot { width:5px; height:5px; background:var(--gold); border-radius:50%; animation:blink 1.2s ease infinite; }
+    .cta-box h2 { font-size: clamp(1.9rem,4.5vw,3.2rem); margin-bottom:14px; }
+    .cta-box .sec-desc { margin: 0 auto 32px; max-width:440px; }
+    .cta-guarantees { display:flex; justify-content:center; gap:24px; flex-wrap:wrap; margin-top:24px; }
+    .cta-g { display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--gray); }
+    .cta-g .ck { color:var(--gold); font-weight:900; }
+
+    @media(max-width:560px) { .cta-box { padding:48px 22px; } }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer { border-top:1px solid var(--border); padding:36px 0; text-align:center; }
+    .footer-logo { font-size:1.25rem; font-weight:900; margin-bottom:14px; letter-spacing:0.5px; }
+    .footer-logo .c { color:var(--gold); }
+    .footer-logo .t { color:var(--white); font-weight:400; font-size:1rem; opacity:0.5; margin-left:2px; }
+    .footer-disc { max-width:540px; margin:0 auto 12px; font-size:0.74rem; color:var(--gray); line-height:1.7; }
+    .footer-copy { font-size:0.72rem; color:var(--gray); opacity:0.45; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo"><span class="c">CRAZII</span><span class="t"> Trading</span></div>
+    <ul class="nav-links">
+      <li><a href="#problem">Vấn Đề</a></li>
+      <li><a href="#solution">Giải Pháp</a></li>
+      <li><a href="#benefits">Lợi Ích</a></li>
+      <li><a href="#how">Cách Dùng</a></li>
+    </ul>
+    <a href="#cta" class="btn-gold" id="nav-cta">Tham Gia Ngay →</a>
+  </div>
+</nav>
+
+<!-- TICKER TRADINGVIEW (cố định bên trên) -->
+<div class="ticker-wrapper">
+  <div class="tradingview-widget-container" style="height:38px;overflow:hidden;">
+    <div class="tradingview-widget-container__widget" style="height:38px;overflow:hidden;"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+    {
+      "symbols": [
+        {"description":"GBP/USD","proName":"FX:GBPUSD"},
+        {"description":"USD/JPY","proName":"FX:USDJPY"},
+        {"description":"AUD/USD","proName":"FX_IDC:AUDUSD"},
+        {"description":"Bitcoin","proName":"BITSTAMP:BTCUSD"},
+        {"description":"Ethereum","proName":"BITSTAMP:ETHUSD"},
+        {"description":"BNB","proName":"BINANCE:BNBUSDT"},
+        {"description":"SOL","proName":"BINANCE:SOLUSDT"},
+        {"description":"XRP","proName":"BINANCE:XRPUSDT"},
+        {"description":"NASDAQ","proName":"NASDAQ:NDX"},
+        {"description":"S&P 500","proName":"FOREXCOM:SPXUSD"}
+      ],
+      "showSymbolLogo": false,
+      "isTransparent": true,
+      "displayMode": "adaptive",
+      "colorTheme": "dark",
+      "locale": "en"
+    }
+    </script>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow"><div class="eyebrow-bar"></div>TẠI SAO CRAZII TRADING</div>
+        <h1>Hệ Thống Được<br />Xây Dựng Bởi<br /><span class="accent">Trader Thực Chiến</span></h1>
+        <p class="hero-desc">Không lý thuyết suông. Mọi phương pháp đều được kiểm chứng qua hàng nghìn giao dịch thực tế. Công cụ AI giúp bạn <strong>tối ưu lợi nhuận lên đến +80%</strong> mà không cần canh chart cả ngày.</p>
+        <div class="btn-group">
+          <a href="#cta" class="btn-gold btn-gold-lg" id="hero-cta">Tham Gia Ngay →</a>
+          <a href="#how" class="btn-ghost">Xem Cách Hoạt Động</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hstat"><div class="val">+80%</div><div class="lbl">Tăng Lợi Nhuận</div></div>
+          <div class="hstat"><div class="val">12,847</div><div class="lbl">Traders Tin Tưởng</div></div>
+          <div class="hstat"><div class="val">94%</div><div class="lbl">Tín Hiệu Chính Xác</div></div>
+        </div>
+      </div>
+      <div class="hero-card-side">
+        <div class="hero-card">
+          <div class="hc-head">
+            <span class="hc-head-title">Crazii Dashboard</span>
+            <div class="live-pill"><div class="live-dot"></div>LIVE</div>
+          </div>
+          <div class="hc-body">
+            <div class="profit-box">
+              <div class="lbl">Lợi Nhuận Tháng Này</div>
+              <div class="val">+$3,842</div>
+              <div class="chg">▲ +78.4% so với tháng trước</div>
+            </div>
+            <div class="trade-list">
+              <div class="trade-row"><div class="trade-coin"><div class="cdot" style="background:#F7931A"></div>BTC Long</div><div class="trade-pnl">+$1,240</div></div>
+              <div class="trade-row"><div class="trade-coin"><div class="cdot" style="background:#627EEA"></div>ETH Long</div><div class="trade-pnl">+$892</div></div>
+              <div class="trade-row"><div class="trade-coin"><div class="cdot" style="background:#9945FF"></div>SOL Long</div><div class="trade-pnl">+$630</div></div>
+              <div class="trade-row"><div class="trade-coin"><div class="cdot" style="background:#F0B90B"></div>BNB Long</div><div class="trade-pnl">+$480</div></div>
+            </div>
+          </div>
+          <div class="hc-foot"><div class="hc-foot-dot"></div>AI đang phân tích thị trường...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ VẤN ĐỀ ══ -->
+<section id="problem" class="section section-alt">
+  <div class="container">
+    <div class="sec-head">
+      <div class="eyebrow"><div class="eyebrow-bar"></div>VẤN ĐỀ</div>
+      <h2>Bạn Đang Gặp Phải<br />Những Bẫy Này?</h2>
+      <p class="sec-desc">Hàng triệu người đi làm muốn đầu tư crypto nhưng liên tục vấp phải những cạm bẫy dưới đây.</p>
+    </div>
+    <div class="grid-box prob-grid">
+      <div class="prob-card">
+        <div class="prob-icon">😩</div>
+        <h3>Không Có Thời Gian Theo Dõi</h3>
+        <p>Đi làm 8 tiếng, về đến nhà đã kiệt sức. Không thể canh chart 24/7, lỡ hết cơ hội vàng mỗi ngày.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">📉</div>
+        <h3>Mua Đỉnh Bán Đáy Liên Tục</h3>
+        <p>Thấy coin tăng mạnh mới mua vào, khi bán thì đã quá muộn. Vừa tốn tiền vừa mất niềm tin.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">😵</div>
+        <h3>Quá Nhiều Thông Tin Nhiễu</h3>
+        <p>Telegram, YouTube, Twitter — ai cũng "bơm" coin riêng. Không biết tin ai, không biết phân tích thế nào.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">💸</div>
+        <h3>Thua Lỗ Vì Cảm Xúc</h3>
+        <p>FOMO khi thị trường tăng, hoảng loạn khi giá giảm. Quyết định cảm tính là nguyên nhân số 1 thua lỗ.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ GIẢI PHÁP ══ -->
+<section id="solution" class="section">
+  <div class="container">
+    <div class="sol-layout">
+      <div>
+        <div class="sec-head">
+          <div class="eyebrow"><div class="eyebrow-bar"></div>GIẢI PHÁP</div>
+          <h2><span class="g">Crazii Trading</span> —<br />Trợ Lý AI Của Bạn</h2>
+          <p class="sec-desc">Không cần kinh nghiệm, không cần ngồi canh màn hình. AI phân tích thị trường liên tục và đưa ra tín hiệu chính xác cho bạn.</p>
+        </div>
+        <div class="feat-list">
+          <div class="feat-item">
+            <div class="feat-ico">🤖</div>
+            <div><h4>AI Phân Tích 24/7</h4><p>Thuật toán học máy phân tích hơn 200 chỉ số kỹ thuật và dữ liệu thị trường theo thời gian thực.</p></div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-ico">🔔</div>
+            <div><h4>Tín Hiệu Mua/Bán Tức Thì</h4><p>Nhận thông báo ngay lập tức qua Telegram khi có cơ hội giao dịch tốt nhất.</p></div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-ico">🛡️</div>
+            <div><h4>Quản Lý Rủi Ro Thông Minh</h4><p>Tự động tính toán Stop-Loss và Take-Profit tối ưu để bảo vệ vốn và tối đa hóa lợi nhuận.</p></div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-ico">📊</div>
+            <div><h4>Báo Cáo Lợi Nhuận Chi Tiết</h4><p>Dashboard trực quan hiển thị P&amp;L, win rate và thống kê giao dịch của bạn mỗi ngày.</p></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sol-card">
+          <div class="sol-card-head"><span class="t">Crazii Dashboard</span><div class="live-pill"><div class="live-dot"></div>LIVE</div></div>
+          <div class="sol-card-body">
+            <div class="sol-profit">
+              <div class="lbl">Lợi Nhuận Tháng Này</div>
+              <div class="val">+$3,842</div>
+              <div class="chg">▲ +78.4%</div>
+            </div>
+            <div class="sol-rows">
+              <div class="sol-row"><div class="sol-coin"><div class="cdot" style="background:#F7931A"></div>BTC Long</div><div class="sol-pnl">+$1,240 ▲</div></div>
+              <div class="sol-row"><div class="sol-coin"><div class="cdot" style="background:#627EEA"></div>ETH Long</div><div class="sol-pnl">+$892 ▲</div></div>
+              <div class="sol-row"><div class="sol-coin"><div class="cdot" style="background:#9945FF"></div>SOL Long</div><div class="sol-pnl">+$630 ▲</div></div>
+              <div class="sol-row"><div class="sol-coin"><div class="cdot" style="background:#F0B90B"></div>BNB Long</div><div class="sol-pnl">+$480 ▲</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LỢI ÍCH ══ -->
+<section id="benefits" class="section section-alt">
+  <div class="container">
+    <div class="sec-head center">
+      <div class="eyebrow">LỢI ÍCH</div>
+      <h2>Tại Sao Hàng Chục Nghìn Người<br />Chọn <span class="g">Crazii Trading</span>?</h2>
+    </div>
+    <div class="grid-box ben-grid">
+      <div class="ben-card"><div class="ben-num">01</div><div class="ben-ico">⏱️</div><h3>Tiết Kiệm 4–6 Giờ Mỗi Ngày</h3><p>Không cần canh chart, không cần đọc tin tức liên tục. AI làm thay bạn — bạn chỉ việc nhận lợi nhuận.</p></div>
+      <div class="ben-card"><div class="ben-num">02</div><div class="ben-ico">🧠</div><h3>Loại Bỏ Hoàn Toàn Cảm Xúc</h3><p>Mọi quyết định dựa 100% vào dữ liệu. Không FOMO, không hoảng loạn — chỉ có lợi nhuận thuần túy.</p></div>
+      <div class="ben-card"><div class="ben-num">03</div><div class="ben-ico">💰</div><h3>Tăng Lợi Nhuận +80%</h3><p>Người dùng ghi nhận mức tăng lợi nhuận trung bình 80% sau 30 ngày sử dụng thực tế.</p></div>
+      <div class="ben-card"><div class="ben-num">04</div><div class="ben-ico">🛡️</div><h3>Bảo Vệ Vốn Tối Đa</h3><p>Hệ thống cảnh báo rủi ro tự động giúp bạn không bao giờ để thua lỗ vượt quá giới hạn an toàn.</p></div>
+      <div class="ben-card"><div class="ben-num">05</div><div class="ben-ico">🌐</div><h3>Hỗ Trợ 50+ Cặp Coin</h3><p>Phân tích đồng thời BTC, ETH, BNB, SOL và hơn 50 cặp giao dịch phổ biến nhất thị trường.</p></div>
+      <div class="ben-card"><div class="ben-num">06</div><div class="ben-ico">📱</div><h3>Dùng Mọi Lúc, Mọi Nơi</h3><p>Tương thích hoàn toàn trên điện thoại. Nhận tín hiệu và theo dõi danh mục ngay trên Telegram.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section id="testimonials" class="section">
+  <div class="container">
+    <div class="sec-head center">
+      <div class="eyebrow">NGƯỜI DÙNG NÓI GÌ</div>
+      <h2>Kết Quả Thực Tế Từ<br />Cộng Đồng <span class="g">Crazii Trading</span></h2>
+    </div>
+    <div class="grid-box testi-grid">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Mình là dân văn phòng, không có thời gian ngồi canh chart. Từ khi dùng Crazii Trading, tháng nào mình cũng có thêm thu nhập thụ động từ crypto mà chẳng cần làm gì nhiều."</p>
+        <div class="testi-footer"><div class="testi-ava" style="background:var(--gold)">T</div><div><div class="testi-name">Minh Tuấn</div><div class="testi-role">Kỹ sư phần mềm · HCM</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Trước đây mình thua lỗ nhiều vì mua theo cảm tính. Crazii Trading đưa ra tín hiệu rất chuẩn, mình đã tăng được hơn 60% lợi nhuận chỉ trong tháng đầu tiên!"</p>
+        <div class="testi-footer"><div class="testi-ava" style="background:var(--gold-light)">L</div><div><div class="testi-name">Thanh Lan</div><div class="testi-role">Nhân viên ngân hàng · Hà Nội</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Đã thử nhiều tool phân tích khác nhưng Crazii Trading là cái duy nhất thực sự giúp mình kiếm được tiền ổn định. Dashboard đẹp, tín hiệu nhanh và hỗ trợ 24/7 rất tận tình."</p>
+        <div class="testi-footer"><div class="testi-ava" style="background:var(--gold-hover);color:var(--white)">H</div><div><div class="testi-name">Đức Hùng</div><div class="testi-role">Nhà đầu tư tự do · Đà Nẵng</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CÁCH HOẠT ĐỘNG ══ -->
+<section id="how" class="section section-alt">
+  <div class="container">
+    <div class="sec-head center">
+      <div class="eyebrow">CÁCH HOẠT ĐỘNG</div>
+      <h2>Bắt Đầu Trong<br /><span class="g">3 Bước</span> Đơn Giản</h2>
+      <p class="sec-desc" style="margin:0 auto;">Không cần kinh nghiệm lập trình hay trading chuyên sâu.</p>
+    </div>
+    <div class="grid-box how-grid">
+      <div class="how-card"><div class="step-tag">BƯỚC 01</div><div class="step-ico">🔐</div><h3>Đăng Ký Miễn Phí</h3><p>Tạo tài khoản trong 30 giây. Không cần thẻ tín dụng, không ràng buộc, hủy bất cứ lúc nào.</p></div>
+      <div class="how-card"><div class="step-tag">BƯỚC 02</div><div class="step-ico">🔗</div><h3>Kết Nối Sàn Giao Dịch</h3><p>Kết nối API với Binance, OKX hoặc Bybit. An toàn tuyệt đối, hệ thống chỉ đọc dữ liệu.</p></div>
+      <div class="how-card"><div class="step-tag">BƯỚC 03</div><div class="step-ico">💹</div><h3>Nhận Tín Hiệu & Kiếm Lời</h3><p>AI bắt đầu phân tích ngay lập tức. Nhận thông báo và thực hiện giao dịch theo tín hiệu.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section id="cta" class="section">
+  <div class="container">
+    <div class="cta-box">
+      <div class="cta-badge"><div class="cta-badge-dot"></div>Ưu Đãi Giới Hạn — Còn 47 Suất Miễn Phí</div>
+      <h2>Sẵn Sàng Kiếm Tiền<br />Từ Crypto <span class="g">Ngay Hôm Nay?</span></h2>
+      <p class="sec-desc">Tham gia cùng 12,847 nhà đầu tư thông minh đang dùng Crazii Trading để kiếm tiền từ crypto một cách hệ thống và bền vững.</p>
+      <a href="#" class="btn-gold btn-gold-lg" id="main-cta" style="display:inline-block; margin-bottom:0;">🚀 Bắt Đầu Miễn Phí Ngay</a>
+      <div class="cta-guarantees">
+        <div class="cta-g"><span class="ck">✓</span> Miễn phí 14 ngày</div>
+        <div class="cta-g"><span class="ck">✓</span> Không cần thẻ tín dụng</div>
+        <div class="cta-g"><span class="ck">✓</span> Hủy bất cứ lúc nào</div>
+        <div class="cta-g"><span class="ck">✓</span> Hỗ trợ 24/7 tiếng Việt</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container">
+    <div class="footer-logo"><span class="c">CRAZII</span><span class="t"> Trading</span></div>
+    <p class="footer-disc">⚠️ Tuyên bố miễn trách nhiệm: Đầu tư tiền ảo tiềm ẩn rủi ro cao. Kết quả trong quá khứ không đảm bảo lợi nhuận tương lai. Crazii Trading cung cấp công cụ phân tích và tín hiệu hỗ trợ ra quyết định, không phải lời khuyên tài chính.</p>
+    <p class="footer-copy">© 2026 Crazii Trading. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  // Nav shrink on scroll
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.height = window.scrollY > 60 ? '54px' : '64px';
+  });
+</script>
+
+</body>
+</html>
