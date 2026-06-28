@@ -2,9 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const Database = require('better-sqlite3');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const BRAIN_DB_PATH = process.env.BRAIN_DB_PATH || '/var/www/html/brain.db';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 if (!GEMINI_API_KEY) {
@@ -14,6 +17,37 @@ if (!GEMINI_API_KEY) {
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
+
+// Đọc brain.db và cache lại — refresh mỗi 10 phút
+let brainContext = '';
+function loadBrain() {
+  try {
+    const db = new Database(BRAIN_DB_PATH, { readonly: true });
+    const brand  = db.prepare('SELECT title, content FROM brand_voice').all();
+    const biz    = db.prepare('SELECT title, content FROM business').all();
+    const know   = db.prepare('SELECT title, content FROM knowledge').all();
+    db.close();
+
+    const fmt = (rows) => rows.map(r => `- ${r.title}: ${r.content}`).join('\n');
+    brainContext = `
+=== THÔNG TIN DOANH NGHIỆP ===
+${fmt(biz)}
+
+=== PHONG CÁCH GIAO TIẾP ===
+${fmt(brand)}
+
+=== KIẾN THỨC NỀN ===
+${fmt(know)}`.trim();
+
+    console.log('Brain loaded:', brand.length, 'brand_voice,', biz.length, 'business,', know.length, 'knowledge entries');
+  } catch (err) {
+    console.warn('Brain DB not available:', err.message);
+    brainContext = '';
+  }
+}
+
+loadBrain();
+setInterval(loadBrain, 10 * 60 * 1000);
 
 // Lấy giá nhiều coin từ Binance
 async function getCryptoPrices() {
@@ -58,11 +92,12 @@ app.post('/api/chat', async (req, res) => {
     const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({
       model: 'gemini-2.0-flash-lite',
-      systemInstruction: `Bạn là trợ lý AI của website crazii.trading — một nền tảng thông tin crypto/trading.
-Bạn có dữ liệu giá thị trường realtime và nhiệm vụ giúp người dùng hiểu thị trường, phân tích giá, tính toán rủi ro lệnh.
-Trả lời ngắn gọn, dễ hiểu bằng tiếng Việt. Nếu người dùng hỏi bằng tiếng Anh thì trả lời tiếng Anh.
-Luôn dựa vào dữ liệu giá thực tế được cung cấp bên dưới khi trả lời.
+      systemInstruction: `Bạn là Trợ lý Crazii — AI tư vấn chính thức của website crazii.trading.
+Nhiệm vụ: hỗ trợ khách hàng về thị trường crypto, phân tích giá, giải đáp thắc mắc về dịch vụ Crazii Trading.
+Trả lời bằng tiếng Việt, ngắn gọn và thân thiện. Nếu khách hỏi tiếng Anh thì trả lời tiếng Anh.
 
+${brainContext ? brainContext + '\n' : ''}
+=== GIÁ THỊ TRƯỜNG REALTIME ===
 ${priceContext}`
     });
 
