@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import Database from 'better-sqlite3';
 import { z } from 'zod';
 
@@ -285,44 +286,46 @@ function buildServer() {
   return server;
 }
 
-// ─── Express app ─────────────────────────────────────────────────────────────
-const app = express();
-app.use(express.json());
+// ─── Stdio mode (GoClaw subprocess) ─────────────────────────────────────────
+const STDIO_MODE = process.argv.includes('--stdio');
 
-app.get('/health', (_req, res) => {
-  const open   = db.prepare("SELECT COUNT(*) as n FROM signals WHERE status='open'").get();
-  const closed = db.prepare("SELECT COUNT(*) as n FROM signals WHERE status='closed'").get();
-  res.json({
-    status: 'ok',
-    server: 'crazii-mcp',
-    version: '1.0.0',
-    signals: { open: open.n, closed: closed.n },
-  });
-});
-
-// Stateless: new server+transport per request
-async function handleMcp(req, res) {
-  const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+if (STDIO_MODE) {
+  // GoClaw launches this as a subprocess — communicate via stdin/stdout
   const server    = buildServer();
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  // Keep process alive; transport closes when GoClaw disconnects
+} else {
+  // ─── HTTP mode (standalone / curl testing) ─────────────────────────────────
+  const app = express();
+  app.use(express.json());
 
-  res.on('close', () => { transport.close(); server.close(); });
+  app.get('/health', (_req, res) => {
+    const open   = db.prepare("SELECT COUNT(*) as n FROM signals WHERE status='open'").get();
+    const closed = db.prepare("SELECT COUNT(*) as n FROM signals WHERE status='closed'").get();
+    res.json({ status: 'ok', server: 'crazii-mcp', version: '1.0.0', signals: { open: open.n, closed: closed.n } });
+  });
 
-  try {
-    await server.connect(transport);
-    await transport.handleRequest(req, res, req.body);
-  } catch (err) {
-    console.error(`[${ts()}] MCP error:`, err.message);
-    if (!res.headersSent) res.status(500).json({ error: err.message });
+  async function handleMcp(req, res) {
+    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+    const server    = buildServer();
+    res.on('close', () => { transport.close(); server.close(); });
+    try {
+      await server.connect(transport);
+      await transport.handleRequest(req, res, req.body);
+    } catch (err) {
+      console.error(`[${ts()}] MCP error:`, err.message);
+      if (!res.headersSent) res.status(500).json({ error: err.message });
+    }
   }
+
+  app.post('/mcp', handleMcp);
+  app.get('/mcp',  handleMcp);
+  app.delete('/mcp', handleMcp);
+
+  app.listen(PORT, HOST, () => {
+    console.log(`[${ts()}] Crazii MCP Server → http://${HOST}:${PORT}`);
+    console.log(`[${ts()}] Brain DB         → ${BRAIN_DB_PATH}`);
+    console.log(`[${ts()}] Telegram         → ${TG_BOT_TOKEN ? 'configured' : 'not configured'}`);
+  });
 }
-
-app.post('/mcp', handleMcp);
-app.get('/mcp',  handleMcp);
-app.delete('/mcp', handleMcp);
-
-// ─── Start ───────────────────────────────────────────────────────────────────
-app.listen(PORT, HOST, () => {
-  console.log(`[${ts()}] Crazii MCP Server → http://${HOST}:${PORT}`);
-  console.log(`[${ts()}] Brain DB         → ${BRAIN_DB_PATH}`);
-  console.log(`[${ts()}] Telegram         → ${TG_BOT_TOKEN ? 'configured' : 'not configured (signal preview only)'}`);
-});
