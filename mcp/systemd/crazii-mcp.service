@@ -1,0 +1,17 @@
+[Unit]
+Description=Crazii MCP Server
+After=network.target mywebcraziitrading.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/crazii/mcp
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+EnvironmentFile=/opt/crazii/mcp/.env
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
